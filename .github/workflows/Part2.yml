@@ -1,0 +1,25 @@
+name: Scheduled Temperature Stats
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+
+jobs:
+  run-temp-stats:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests
+
+      - name: Run temperature stats script
+        run: python temps_stats.py
