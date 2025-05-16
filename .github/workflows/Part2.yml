@@ -3,7 +3,7 @@ name: Scheduled Temperature Stats
 on:
   schedule:
     - cron: '*/5 * * * *'
-
+  workflow_dispatch:
 jobs:
   run-temp-stats:
     runs-on: ubuntu-latest
