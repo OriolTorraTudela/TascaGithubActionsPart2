@@ -12,8 +12,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0           # Fetch full history for pushes
-          persist-credentials: true # So the checkout action can push
+          persist-credentials: true # So the checkout action can push # So the checkout action can push
 
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
