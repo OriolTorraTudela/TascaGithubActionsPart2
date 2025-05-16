@@ -1,41 +1,54 @@
-name: Scheduled Temperature Stats
+name: Executar Python i pujar JSON cada 5 minuts
 
 on:
   schedule:
-    # Every 5 minutes
+    # Cada 5 minuts
     - cron: '*/5 * * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
+
 jobs:
   run-temp-stats:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Clonar repositori
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0           # Fetch full history for pushes
-          persist-credentials: true # So the checkout action can push # So the checkout action can push
+          fetch-depth: 0
+          persist-credentials: true
 
-      - name: Set up Python 3.11
+      - name: Configurar Python 3.11
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Instal·lar dependències necessàries
         run: |
           python -m pip install --upgrade pip
           pip install requests
 
-      - name: Run temperature stats script
+      - name: Executar script Python
         run: python temps_stats.py
 
-      - name: Commit JSON output
+      - name: Llistar fitxers generats
+        run: ls -l temp_*.json || echo "No s'han generat fitxers .json"
+
+      - name: Configurar Git per fer commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          # Add only the latest JSON file
+
+      - name: Afegir i commitejar fitxers JSON
+        run: |
           git add temp_*.json
-          # Only commit if there are changes
-          git diff --cached --quiet || git commit -m "Update temperature stats JSON"
-          # Push back to the main branch
-          git push origin HEAD:main
+          git diff --cached --quiet || git commit -m "Afegit fitxer JSON generat per GitHub Actions [skip ci]"
+
+      - name: Configurar remote amb token
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+
+      - name: Pujar canvis al repositori
+        run: git push origin HEAD:main
