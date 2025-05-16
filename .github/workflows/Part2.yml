@@ -32,7 +32,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          # Add only the latest JSON file
           git add temp_*.json
           # Only commit if there are changes
           git diff --cached --quiet || git commit -m "Update temperature stats JSON"
-          git push
+          # Push back to the main branch
+          git push origin HEAD:main
