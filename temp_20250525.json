@@ -1,0 +1,12 @@
+{
+  "date": "2025-05-25",
+  "location": {
+    "latitude": 41.3851,
+    "longitude": 2.1734
+  },
+  "temperature": {
+    "max": 20.9,
+    "min": 16.0,
+    "mean": 18.8
+  }
+}
